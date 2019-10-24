@@ -1,45 +1,57 @@
 import React from 'react';
-import { Media } from 'reactstrap';
+
+import { Card, CardBody, CardImg, CardImgOverlay, CardText, CardTitle } from 'reactstrap';
 
 export class Menu extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            selecedDish : null
+            selecedDish: null
         }
+
     }
 
-    onDishSelected(dish) {
+    onDishSelect(dish) {
+        console.log("selected " + dish)
         this.setState({
-            selecedDish : dish
+            selecedDish: dish
         });
     }
 
     renderDish() {
-        if (this.state.selecedDish != null) {
-
+        var dish = this.state.selecedDish ; 
+        console.log("render " + dish)
+        if (dish != null) {
+            return (
+                <Card key={dish.id}>
+                    <CardImg top src={dish.image} alt={dish.name} />
+                    <CardBody>
+                        <CardTitle>{dish.name}</CardTitle>
+                        <CardText>{dish.description}</CardText>
+                    </CardBody>
+                </Card>
+            );
         } else {
-            return <div></div>
+            return (
+                <div></div>
+            );
         }
     }
 
     render() {
         const menu = this.props.dishes.map((dish) => {
             return (
-                <div key={dish.id} className="col-12 mt-5">
-                    <Media tag="li">
-                        <Media left middle>
-                            <Media object src={dish.image}></Media>
-                        </Media>
-
-                        <Media body className="ml-5">
-                            <Media heading > {dish.name}</Media>
-                            <p>{dish.description}</p>
-                        </Media>
-                    </Media>
-                    <hr />
+                <div  className="col-12 col-md-5 m-1">
+                    <Card key={dish.id}
+                        onClick={ () => this.onDishSelect(dish )}>
+                        <CardImg width="100%" src={dish.image} alt={dish.name} />
+                        <CardImgOverlay>
+                            <CardTitle>{dish.name}</CardTitle>
+                        </CardImgOverlay>
+                    </Card>
                 </div>
+
             );
         });
 
@@ -47,12 +59,15 @@ export class Menu extends React.Component {
         return (
             <div className="container">
                 <div className="row">
-
                     {menu}
                 </div>
+
                 <div className="row">
-                    {this.renderDish}
+                    <div className="col-12 col-md-5 m-1">
+                        {this.renderDish()}
+                    </div>
                 </div>
+
             </div>
         );
     }
